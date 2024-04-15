@@ -42,7 +42,7 @@ const UserSchema = new mongoose.Schema({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
     default: [],
   },
-  followeing: {
+  following: {
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
     default: [],
   },

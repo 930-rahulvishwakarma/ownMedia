@@ -7,7 +7,7 @@ const RightSideBar = () => {
       <div className="flex flex-col gap-4">
         <h3 className="text-light-1 text-heading3-bold">Sponsored</h3>
         <Image
-          src="/instalogo.png"
+          src="/assets/logo.png"
           alt="ad"
           width={280}
           height={200}
