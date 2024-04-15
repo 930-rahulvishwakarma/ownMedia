@@ -11,7 +11,6 @@ const Menu = () => {
     <div className="flex flex-col gap-2">
       {sidebarLinks.map((link) => {
         const isActive = pathname === link.route;
-        console.log(link.route);
         return (
           <Link
             key={link.label}
