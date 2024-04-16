@@ -60,7 +60,7 @@ import {
       title: "Search",
     },
     {
-      url: "/saved-posts",
+      url: "/saved-post",
       title: "Saved Posts",
     },
     {

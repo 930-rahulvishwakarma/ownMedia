@@ -39,11 +39,11 @@ const UserSchema = new mongoose.Schema({
     default: [],
   },
   followers: {
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     default: [],
   },
   following: {
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     default: [],
   },
   createdAt:{

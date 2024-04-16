@@ -11,15 +11,29 @@ import Menu from "./Menu";
 
 const LeftSideBar = () => {
   const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState({});
+  const { user , isLoaded  } = useUser();
+
+  const getUser = async () => {
+    let res = await fetch(`/api/user/${user.id}`);
+    res = await res.json();
+    if (res?.status === 200) {
+      setUserData(res);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  });
+    if (user) {
+      getUser();
+    }
+  }, [user]);
+
+  console.log(userData?.data);
+  
 
   return (
-    <div className="h-screen left-0 top-0 sticky overflow-auto px-10 py-6 flex flex-col gap-6 max-md:hidden 2xl:w-[350px] pr-20 custom-scrollbar">
+    <div className="h-screen left-0 top-0 sticky bg-[#18152075] overflow-auto px-10 py-6 flex flex-col gap-6 max-md:hidden 2xl:w-[350px] pr-20 custom-scrollbar">
       <Link href="/">
         <Image src="/assets/logo.png" alt="logo" width={50} height={50} />
       </Link>
@@ -28,7 +42,7 @@ const LeftSideBar = () => {
         <div className="flex flex-col gap-2 items-center text-light-1">
           {/* <Link href={`/profile/${userData._id}/posts`}> */}
           <Image
-            src={"/assets/phucmai.png"}
+            src={userData?.data?.profilePhoto}
             alt="profile photo"
             width={50}
             height={50}
@@ -36,8 +50,7 @@ const LeftSideBar = () => {
           />
           {/* </Link> */}
           <p className="text-small-bold">
-            {/* {userData?.firstName} {userData?.lastName} */}
-            username
+            {userData?.data?.userName || "username" }
           </p>
         </div>
         <div className="flex text-light-1 justify-between">
@@ -46,11 +59,11 @@ const LeftSideBar = () => {
             <p className="text-tiny-medium">Posts</p>
           </div>
           <div className="flex flex-col items-center">
-            <p className="text-base-bold">20</p>
+            <p className="text-base-bold"> {userData?.data?.followers.length || 0} </p>
             <p className="text-tiny-medium">Followers</p>
           </div>
           <div className="flex flex-col items-center">
-            <p className="text-base-bold">10</p>
+            <p className="text-base-bold"> {userData?.data?.following.length || 0} </p>
             <p className="text-tiny-medium">Following</p>
           </div>
         </div>
@@ -63,10 +76,12 @@ const LeftSideBar = () => {
       <hr />
 
       <div className="flex gap-4 items-center">
-        <UserButton afterSignOutUrl="/sign-in" />
+        <UserButton
+          afterSignOutUrl="/sign-in"
+          appearance={{ baseTheme: dark }}
+        />
         <p className="text-light-1 text-body-bold">Manage Account</p>
       </div>
-
     </div>
   );
 };
