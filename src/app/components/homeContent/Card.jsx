@@ -46,7 +46,7 @@ function Card({ data }) {
           alt="post photo"
           width={200}
           height={150}
-          className="rounded-lg "
+          className="rounded-lg w-[95%]  "
           unoptimized
         />
       </div>
