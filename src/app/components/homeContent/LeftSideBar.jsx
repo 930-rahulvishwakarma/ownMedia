@@ -12,7 +12,7 @@ import Menu from "./Menu";
 const LeftSideBar = () => {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState({});
-  const { user , isLoaded  } = useUser();
+  const { user, isLoaded } = useUser();
 
   const getUser = async () => {
     let res = await fetch(`/api/user/${user.id}`);
@@ -29,10 +29,10 @@ const LeftSideBar = () => {
     }
   }, [user]);
 
-  console.log(userData?.data);
-  
 
-  return (
+  return loading || !isLoaded ? (
+    <Loader />
+  ) : (
     <div className="h-screen left-0 top-0 sticky bg-[#18152075] overflow-auto px-10 py-6 flex flex-col gap-6 max-md:hidden 2xl:w-[350px] pr-20 custom-scrollbar">
       <Link href="/">
         <Image src="/assets/logo.png" alt="logo" width={50} height={50} />
@@ -46,11 +46,11 @@ const LeftSideBar = () => {
             alt="profile photo"
             width={50}
             height={50}
-            className="rounded-full"
+            className="rounded-full object-cover h-[60px] w-[60px] "
           />
           {/* </Link> */}
           <p className="text-small-bold">
-            {userData?.data?.userName || "username" }
+            {userData?.data?.userName || "username"}
           </p>
         </div>
         <div className="flex text-light-1 justify-between">
@@ -59,11 +59,17 @@ const LeftSideBar = () => {
             <p className="text-tiny-medium">Posts</p>
           </div>
           <div className="flex flex-col items-center">
-            <p className="text-base-bold"> {userData?.data?.followers.length || 0} </p>
+            <p className="text-base-bold">
+              {" "}
+              {userData?.data?.followers.length || 0}{" "}
+            </p>
             <p className="text-tiny-medium">Followers</p>
           </div>
           <div className="flex flex-col items-center">
-            <p className="text-base-bold"> {userData?.data?.following.length || 0} </p>
+            <p className="text-base-bold">
+              {" "}
+              {userData?.data?.following.length || 0}{" "}
+            </p>
             <p className="text-tiny-medium">Following</p>
           </div>
         </div>
