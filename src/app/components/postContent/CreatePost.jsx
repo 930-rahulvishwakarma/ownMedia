@@ -3,8 +3,10 @@ import { useForm } from "react-hook-form";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 function CreatePost({ post }) {
+  const [image,setImage] = useState();
   const {
     register,
     handleSubmit,
@@ -16,6 +18,8 @@ function CreatePost({ post }) {
 
   const router = useRouter();
 
+  console.log(watch("postPhoto"));
+
 
   const convertToBlob = async (file) => {
     return new Promise((resolve, reject) => {
@@ -26,13 +30,12 @@ function CreatePost({ post }) {
     });
   };
 
-
   const handlePublish = async (data) => {
     try {
       const postForm = new FormData();
 
       postForm.append("creatorId", data.creatorId);
-      postForm.append("username",data.username)
+      postForm.append("username", data.username);
       postForm.append("caption", data.caption);
       postForm.append("tag", data.tag);
 
@@ -41,17 +44,15 @@ function CreatePost({ post }) {
         postForm.append("postPhoto", fileBlob, data.postPhoto[0].name);
       }
 
-
       const response = await fetch(`api/post/upload`, {
         method: "POST",
         body: postForm,
       });
 
       if (response.status === 200) {
-        router.push(`/`)
+        router.push(`/`);
         console.log("posted");
       }
-
     } catch (err) {
       console.log(err);
     }
@@ -86,14 +87,19 @@ function CreatePost({ post }) {
             />
           )
         ) : (
-          <>
-            <AddPhotoAlternateIcon sx={{ fontSize: "100px", color: "white" }} />
-            <p>Upload a photo</p>
-          </>
+          typeof watch("postPhoto") === "undefined" && (
+            <>
+              <AddPhotoAlternateIcon
+                sx={{ fontSize: "100px", color: "white" }}
+              />
+              <p>Upload a photo</p>
+            </>
+          )
         )}
       </label>
       <input
-        {...register("postPhoto", {
+        {...register("postPhoto", 
+        {
           validate: (value) => {
             if (
               typeof value === "null" ||
