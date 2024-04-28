@@ -18,17 +18,16 @@ function CreatePost({ post }) {
 
   const router = useRouter();
 
-  console.log(watch("postPhoto"));
 
 
-  const convertToBlob = async (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(new Blob([reader.result]));
-      reader.onerror = (error) => reject(error);
-      reader.readAsArrayBuffer(file);
-    });
-  };
+  // const convertToBlob = async (file) => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.onload = () => resolve(new Blob([reader.result]));
+  //     reader.onerror = (error) => reject(error);
+  //     reader.readAsArrayBuffer(file);
+  //   });
+  // };
 
   const handlePublish = async (data) => {
     try {
@@ -38,11 +37,12 @@ function CreatePost({ post }) {
       postForm.append("username", data.username);
       postForm.append("caption", data.caption);
       postForm.append("tag", data.tag);
+      postForm.append("postPhoto",data.postPhoto[0])
 
-      if (data.postPhoto) {
-        const fileBlob = await convertToBlob(data.postPhoto[0]);
-        postForm.append("postPhoto", fileBlob, data.postPhoto[0].name);
-      }
+      // if (data.postPhoto) {
+      //   const fileBlob = await convertToBlob(data.postPhoto[0]);
+      //   postForm.append("postPhoto", fileBlob, data.postPhoto[0].name);
+      // }
 
       const response = await fetch(`api/post/upload`, {
         method: "POST",
