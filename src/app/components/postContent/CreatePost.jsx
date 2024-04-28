@@ -49,10 +49,10 @@ function CreatePost({ post }) {
         body: postForm,
       });
 
-      if (response.status === 200) {
-        router.push(`/`);
-        console.log("posted");
-      }
+      // if (response.status === 200) {
+      //   router.push(`/`);
+      //   console.log("posted");
+      // }
     } catch (err) {
       console.log(err);
     }
