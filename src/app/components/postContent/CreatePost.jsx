@@ -1,148 +1,101 @@
-"use client";
-import { useForm } from "react-hook-form";
+"use client"
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-
+import { useRouter } from "next/navigation";
 function CreatePost({ post }) {
-  const [image,setImage] = useState();
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm({
-    defaultValues: post,
-  });
-
   const router = useRouter();
+  const [file, setFile] = useState(null);
+  const [caption, setCaption] = useState('');
+  const [tag, setTag] = useState('');
+  const [imagePreview, setImagePreview] = useState(null); // State for image preview
 
+  const onSubmit = async (e) => {
+    e.preventDefault();
 
-
-  // const convertToBlob = async (file) => {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.onload = () => resolve(new Blob([reader.result]));
-  //     reader.onerror = (error) => reject(error);
-  //     reader.readAsArrayBuffer(file);
-  //   });
-  // };
-
-  const handlePublish = async (data) => {
-    try {
+    if (tag.length < 4 || caption.length < 4) {
+      alert("caption and tag fields are required")
+    } else {
       const postForm = new FormData();
-
-      postForm.append("creatorId", data.creatorId);
-      postForm.append("username", data.username);
-      postForm.append("caption", data.caption);
-      postForm.append("tag", data.tag);
-      postForm.append("postPhoto",data.postPhoto[0])
-
-      // if (data.postPhoto) {
-      //   const fileBlob = await convertToBlob(data.postPhoto[0]);
-      //   postForm.append("postPhoto", fileBlob, data.postPhoto[0].name);
-      // }
+      postForm.append('creatorId', post.creatorId)
+      postForm.append('username', post.username)
+      postForm.append('caption', caption)
+      postForm.append('tag', tag)
+      postForm.append('postPhoto', file)
 
       const response = await fetch(`api/post/upload`, {
         method: "POST",
         body: postForm,
       });
 
-      // if (response.status === 200) {
-      //   router.push(`/`);
-      //   console.log("posted");
-      // }
-    } catch (err) {
-      console.log(err);
+      if (response.status === 200) {
+        router.push('/')
+      }
+
+    }
+
+
+  }
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files?.[0];
+    setFile(selectedFile);
+    if (selectedFile) {
+      const objectUrl = URL.createObjectURL(selectedFile);
+      setImagePreview(objectUrl);
     }
   };
 
   return (
     <form
       className="flex flex-col gap-7 pb-24"
-      onSubmit={handleSubmit(handlePublish)}
+      onSubmit={onSubmit}
     >
       <label
         htmlFor="photo"
         className="flex gap-4 items-center text-light-1 cursor-pointer"
       >
-        {watch("postPhoto") ? (
-          // Check profile photo is a string or a file
-          typeof watch("postPhoto") === "string" ? (
-            <Image
-              src={watch("postPhoto")}
-              alt="post"
-              width={250}
-              height={200}
-              className="object-cover rounded-lg"
-            />
-          ) : (
-            <Image
-              src={URL.createObjectURL(watch("postPhoto")[0])}
-              alt="post"
-              width={250}
-              height={200}
-              className="object-cover rounded-lg"
-            />
-          )
+        {imagePreview ? (
+          <Image
+            src={imagePreview}
+            alt="post"
+            width={250}
+            height={200}
+            className="object-cover rounded-lg"
+          />
         ) : (
-          typeof watch("postPhoto") === "undefined" && (
-            <>
-              <AddPhotoAlternateIcon
-                sx={{ fontSize: "100px", color: "white" }}
-              />
-              <p>Upload a photo</p>
-            </>
-          )
+          <>
+          <AddPhotoAlternateIcon sx={{ fontSize: "100px", color: "white" }} />
+          <h1>Upload the post</h1>
+          </>
         )}
       </label>
       <input
-        {...register("postPhoto", 
-        {
-          validate: (value) => {
-            if (
-              typeof value === "null" ||
-              (Array.isArray(value) && value.length === 0) ||
-              value === "underfined"
-            ) {
-              return "A photo is required!";
-            }
-            return true;
-          },
-        })}
         id="photo"
         type="file"
         accept="image/*"
-        style={{ display: "none" }}
+        className="hidden"
+        onChange={handleFileChange}
+        required
       />
-      {errors.postPhoto && (
-        <p className="text-red-500">{errors.postPhoto.message}</p>
-      )}
 
       <div>
         <label htmlFor="caption" className="text-light-1">
           Caption
         </label>
         <textarea
-          {...register("caption", {
-            required: "Caption is required",
-            validate: (value) => {
-              if (value.length < 3) {
-                return "Caption must be more than 2 characters";
-              }
-            },
-          })}
           type="text"
           rows={3}
           placeholder="What's on your mind?"
           className="w-full input"
           id="caption"
+          value={caption}
+          onChange={(e) => setCaption(e.target.value)}
+          required
+
         />
 
-        {errors.caption && (
-          <p className="text-red-500">{errors.caption.message}</p>
-        )}
+
       </div>
 
       <div>
@@ -150,13 +103,14 @@ function CreatePost({ post }) {
           Tag
         </label>
         <input
-          {...register("tag", { required: "Tag is required" })}
           type="text"
           placeholder="#tag"
           className="w-full input"
+          required
+          value={tag}
+          onChange={(e) => setTag(e.target.value)}
         />
 
-        {errors.tag && <p className="text-red-500">{errors.tag.message}</p>}
       </div>
 
       <button

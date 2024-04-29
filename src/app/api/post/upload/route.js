@@ -9,7 +9,6 @@ export const POST = async (req) => {
   try {
     await connectToDB();
     const data = await req.formData();
-    console.log(data);
     let postPhoto = data.get("postPhoto");
     const bytes = await postPhoto.arrayBuffer();
     const buffer = Buffer.from(bytes);
