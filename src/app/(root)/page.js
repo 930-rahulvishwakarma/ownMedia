@@ -27,7 +27,7 @@ export default function Home() {
     if (user) {
       getUser();
     }
-  }, [user]);
+  },[user]);
 
   useEffect(() => {
     getPostdata();
