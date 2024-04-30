@@ -29,8 +29,8 @@ const TopBar = () => {
   //   }
   // }, [user]);
 
-  // const router = useRouter();
-  // const [search, setSearch] = useState("");
+  const router = useRouter();
+  const [search, setSearch] = useState("");
 
   return  (
     <div className="flex justify-between items-center mt-6  ">
@@ -39,12 +39,12 @@ const TopBar = () => {
           type="text"
           className="search-bar"
           placeholder="Search posts, people, ..."
-          // value={search}
-          // onChange={(e) => setSearch(e.target.value)}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
         <Search
           className="search-icon"
-          // onClick={() => router.push(`/search/posts/${search}`)}
+          onClick={() => router.push(`/search/posts/${search}`)}
         />
       </div>
 

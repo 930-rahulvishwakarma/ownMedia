@@ -5,12 +5,18 @@ import {
     BookmarksOutlined,
     FavoriteBorder,
   } from "@mui/icons-material";
+  import AccountCircleIcon from '@mui/icons-material/AccountCircle';
   
   export const sidebarLinks = [
     {
       icon: <Home sx={{ color: "white", fontSize: "26px" }} />,
       route: "/",
       label: "Home",
+    },
+    {
+      icon: <AccountCircleIcon sx={{ color: "white", fontSize: "26px" }} />,
+      route: "/profile",
+      label: "profile",
     },
     {
       icon: <AddPhotoAlternateOutlined sx={{ color: "white", fontSize: "26px" }} />,
@@ -38,6 +44,10 @@ import {
     {
       url: "/",
       title: "Feed",
+    },
+    {
+      url: "/profile",
+      title: "profile",
     },
     {
       url: "/edit-profile",
