@@ -33,6 +33,8 @@ export default function Home() {
     getPostdata();
   }, []);
 
+  console.log(userData);
+
   return (
     <div className="flex flex-col-reverse gap-10">
       {post && post.length > 0 ? (

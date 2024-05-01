@@ -1,8 +1,11 @@
+import Card from '@/app/components/homeContent/Card'
 import React from 'react'
 
 function Post() {
   return (
-    <div>Post</div>
+    <div>
+      <Card/>
+    </div>
   )
 }
 

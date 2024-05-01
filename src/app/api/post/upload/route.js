@@ -1,4 +1,5 @@
 import Post from "@/lib/models/post";
+import User from "@/lib/models/user";
 import { connectToDB } from "@/lib/mongodb/mongoose";
 import { NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
@@ -31,7 +32,16 @@ export const POST = async (req) => {
       tag: data.get("tag"),
       postPhoto: postPhoto,
     });
+    
     await newPost.save();
+
+    // Update the user's posts array
+    await User.findByIdAndUpdate(
+      data.get("creatorId"),
+      { $push: { posts: newPost._id } },
+      { new: true, useFindAndModify: false }
+    )
+
     return NextResponse.json({
       status: 200,
       message: "file uploaded successfully",
